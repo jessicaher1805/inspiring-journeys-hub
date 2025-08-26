@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useState } from "react";
 import heroBanner from "@/assets/hero-banner.jpg";
 
 const categories = [
@@ -13,12 +14,24 @@ const categories = [
 ];
 
 const HeroBanner = () => {
+  const [currentCategory, setCurrentCategory] = useState(0);
+  
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  const nextCategory = () => {
+    setCurrentCategory((prev) => (prev + 1) % categories.length);
+  };
+
+  const prevCategory = () => {
+    setCurrentCategory((prev) => (prev - 1 + categories.length) % categories.length);
+  };
+
+  const currentCat = categories[currentCategory];
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -53,38 +66,71 @@ const HeroBanner = () => {
             </p>
           </div>
 
-          {/* Interactive image with category overlays */}
-          <div className="relative max-w-6xl mx-auto">
-            <div className="relative aspect-[21/9] rounded-2xl overflow-hidden shadow-2xl">
-              <img
-                src={heroBanner}
-                alt="Mujeres Inspiradoras"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-              
-              {/* Category overlays positioned on the image */}
-              <div className="absolute inset-0 grid grid-cols-4 grid-rows-2 gap-2 p-6">
-                {categories.map((category, index) => (
-                  <button
-                    key={category.id}
-                    onClick={() => scrollToSection(category.id)}
-                    className={`
-                      group relative overflow-hidden rounded-lg bg-black/30 backdrop-blur-sm border border-white/20 
-                      hover:bg-black/50 hover:border-white/40 transition-all duration-300 
-                      flex items-center justify-center text-center p-4
-                      ${index === 6 ? 'col-span-4 row-span-1' : 'col-span-2 row-span-1'}
-                    `}
-                  >
-                    <div className="relative z-10">
-                      <h3 className="text-white font-semibold text-sm md:text-base lg:text-lg">
-                        {category.label}
-                      </h3>
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </button>
+          {/* Category banners carousel */}
+          <div className="relative max-w-5xl mx-auto">
+            <div className="overflow-hidden">
+              <div 
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${currentCategory * 100}%)` }}
+              >
+                {categories.map((category) => (
+                  <div key={category.id} className="w-full flex-shrink-0">
+                    <button
+                      onClick={() => scrollToSection(category.id)}
+                      className="relative aspect-[21/9] w-full rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-r from-primary/20 to-secondary/20 group hover:scale-105 transition-all duration-300"
+                    >
+                      <img
+                        src={heroBanner}
+                        alt={category.label}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
+                      
+                      {/* Content overlay */}
+                      <div className="absolute inset-0 flex items-center justify-center text-center p-8">
+                        <div className="max-w-2xl space-y-4">
+                          <h3 className="text-3xl md:text-5xl font-bold text-white group-hover:text-primary-light transition-colors duration-300">
+                            {category.label}
+                          </h3>
+                          <div className="w-20 h-1 bg-primary mx-auto rounded-full"></div>
+                        </div>
+                      </div>
+                    </button>
+                  </div>
                 ))}
               </div>
+            </div>
+            
+            {/* Navigation arrows */}
+            <Button
+              onClick={prevCategory}
+              variant="outline"
+              size="icon"
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 border-white/30 text-white hover:bg-black/70 z-10 w-12 h-12"
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </Button>
+            
+            <Button
+              onClick={nextCategory}
+              variant="outline"
+              size="icon"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 border-white/30 text-white hover:bg-black/70 z-10 w-12 h-12"
+            >
+              <ChevronRight className="h-6 w-6" />
+            </Button>
+            
+            {/* Dots indicator */}
+            <div className="flex justify-center mt-6 space-x-2">
+              {categories.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentCategory(index)}
+                  className={`w-3 h-3 rounded-full transition-colors duration-300 ${
+                    index === currentCategory ? 'bg-primary' : 'bg-white/30'
+                  }`}
+                />
+              ))}
             </div>
           </div>
         </div>

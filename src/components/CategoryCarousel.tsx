@@ -88,22 +88,43 @@ const CategoryCarousel = ({ categoryId }: CategoryCarouselProps) => {
   }
 
   return (
-    <div className="relative w-full max-w-6xl mx-auto">
+    <div className="relative w-full max-w-5xl mx-auto">
       <div className="overflow-hidden">
         <div 
           className="flex transition-transform duration-500 ease-in-out"
-          style={{ transform: `translateX(-${currentIndex * 25}%)` }}
+          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
           {women.map((woman) => {
             const quote = quotes.find(q => q.mujer_id === woman.id);
             return (
-              <div key={woman.id} className="w-1/4 flex-shrink-0 px-2">
-                <WomanCard
-                  id={woman.id}
-                  imageUrl={woman.imagen_url}
-                  nombreConocido={woman.nombre_conocido}
-                  cita={quote?.texto || "Sin cita disponible"}
-                />
+              <div key={woman.id} className="w-full flex-shrink-0">
+                {/* Banner-style card */}
+                <div className="relative aspect-[21/9] rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-r from-primary/20 to-secondary/20">
+                  <img
+                    src={woman.imagen_url}
+                    alt={woman.nombre_conocido}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
+                  
+                  {/* Content overlay */}
+                  <div className="absolute inset-0 flex items-center justify-start p-8 md:p-12">
+                    <div className="max-w-2xl space-y-4">
+                      <h3 className="text-3xl md:text-5xl font-bold text-white">
+                        {woman.nombre_conocido}
+                      </h3>
+                      <p className="text-lg md:text-xl text-white/90 italic leading-relaxed">
+                        "{quote?.texto || "Sin cita disponible"}"
+                      </p>
+                      <Button 
+                        onClick={() => window.location.href = `/mujer/${woman.id}`}
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-3 text-lg"
+                      >
+                        Conocer más
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               </div>
             );
           })}
@@ -111,35 +132,39 @@ const CategoryCarousel = ({ categoryId }: CategoryCarouselProps) => {
       </div>
 
       {/* Navigation buttons */}
-      <Button
-        variant="outline"
-        size="icon"
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 bg-background/80 backdrop-blur-sm border-primary/30 hover:border-primary hover:bg-primary/10"
-        onClick={prevSlide}
-      >
-        <ChevronLeft className="h-4 w-4" />
-      </Button>
-      
-      <Button
-        variant="outline"
-        size="icon"
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 bg-background/80 backdrop-blur-sm border-primary/30 hover:border-primary hover:bg-primary/10"
-        onClick={nextSlide}
-      >
-        <ChevronRight className="h-4 w-4" />
-      </Button>
+      {women.length > 1 && (
+        <>
+          <Button
+            variant="outline"
+            size="icon"
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 bg-black/50 border-white/30 text-white hover:bg-black/70 w-12 h-12"
+            onClick={prevSlide}
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </Button>
+          
+          <Button
+            variant="outline"
+            size="icon"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 bg-black/50 border-white/30 text-white hover:bg-black/70 w-12 h-12"
+            onClick={nextSlide}
+          >
+            <ChevronRight className="h-6 w-6" />
+          </Button>
+        </>
+      )}
 
       {/* Dots indicator */}
       <div className="flex justify-center mt-6 space-x-2">
-        {Array.from({ length: Math.ceil(women.length / 4) }).map((_, index) => (
+        {women.map((_, index) => (
           <button
             key={index}
             className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              Math.floor(currentIndex / 4) === index 
+              currentIndex === index 
                 ? 'bg-primary shadow-[var(--shadow-glow)]' 
                 : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
             }`}
-            onClick={() => setCurrentIndex(index * 4)}
+            onClick={() => setCurrentIndex(index)}
           />
         ))}
       </div>

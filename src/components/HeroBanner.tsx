@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import heroBanner from "@/assets/hero-banner.jpg";
 
 const categories = [
   { id: "voces-creadoras", label: "Voces Creadoras", categoryId: 1 },
@@ -73,7 +74,7 @@ const HeroBanner = () => {
           <div className="relative">
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
               <img
-                src="/lovable-uploads/27913497-40f7-4f21-b216-00750654c2f9.png"
+                src={heroBanner}
                 alt="Mujeres Inspiradoras"
                 className="w-full h-full object-cover"
               />

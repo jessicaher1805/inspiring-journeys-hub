@@ -33,70 +33,59 @@ const HeroBanner = () => {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left content */}
-          <div className="text-center lg:text-left space-y-8">
-            <div className="space-y-6">
-              <div className="inline-block px-4 py-2 bg-orange-500 text-white font-semibold rounded-full text-sm uppercase tracking-wide">
-                Mujeres que Transforman
-              </div>
-              
-              <h1 className="text-5xl md:text-7xl font-bold text-white leading-tight">
-                El poder del
-                <span className="block bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">
-                  mundo se decide
-                </span>
-                <span className="block text-white">aquí</span>
-              </h1>
-              
-              <p className="text-xl text-purple-100 leading-relaxed max-w-2xl">
-                Descubre las historias de mujeres extraordinarias que han cambiado el curso de la historia 
-                y siguen inspirando a las nuevas generaciones.
-              </p>
+        <div className="text-center space-y-8">
+          <div className="space-y-6">
+            <div className="inline-block px-4 py-2 bg-orange-500 text-white font-semibold rounded-full text-sm uppercase tracking-wide">
+              Mujeres que Transforman
             </div>
-
-            {/* Category navigation buttons */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 max-w-md mx-auto lg:mx-0">
-              {categories.map((category) => (
-                <Button
-                  key={category.id}
-                  onClick={() => scrollToSection(category.id)}
-                  variant="outline"
-                  className="text-left justify-start bg-white/10 border-white/20 text-white hover:bg-white/20 hover:border-white/40 transition-all duration-300 py-3 px-4"
-                >
-                  {category.label}
-                </Button>
-              ))}
-            </div>
+            
+            <h1 className="text-5xl md:text-7xl font-bold text-white leading-tight">
+              El poder del
+              <span className="block bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">
+                mundo se decide
+              </span>
+              <span className="block text-white">aquí</span>
+            </h1>
+            
+            <p className="text-xl text-purple-100 leading-relaxed max-w-3xl mx-auto">
+              Descubre las historias de mujeres extraordinarias que han cambiado el curso de la historia 
+              y siguen inspirando a las nuevas generaciones.
+            </p>
           </div>
 
-          {/* Right content - Featured image */}
-          <div className="relative">
-            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
+          {/* Interactive image with category overlays */}
+          <div className="relative max-w-6xl mx-auto">
+            <div className="relative aspect-[21/9] rounded-2xl overflow-hidden shadow-2xl">
               <img
                 src={heroBanner}
                 alt="Mujeres Inspiradoras"
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+              
+              {/* Category overlays positioned on the image */}
+              <div className="absolute inset-0 grid grid-cols-4 grid-rows-2 gap-2 p-6">
+                {categories.map((category, index) => (
+                  <button
+                    key={category.id}
+                    onClick={() => scrollToSection(category.id)}
+                    className={`
+                      group relative overflow-hidden rounded-lg bg-black/30 backdrop-blur-sm border border-white/20 
+                      hover:bg-black/50 hover:border-white/40 transition-all duration-300 
+                      flex items-center justify-center text-center p-4
+                      ${index === 6 ? 'col-span-4 row-span-1' : 'col-span-2 row-span-1'}
+                    `}
+                  >
+                    <div className="relative z-10">
+                      <h3 className="text-white font-semibold text-sm md:text-base lg:text-lg">
+                        {category.label}
+                      </h3>
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </button>
+                ))}
+              </div>
             </div>
-            
-            {/* Navigation arrows */}
-            <Button
-              variant="outline"
-              size="icon"
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/20 border-white/30 text-white hover:bg-white/20"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </Button>
-            
-            <Button
-              variant="outline"
-              size="icon" 
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/20 border-white/30 text-white hover:bg-white/20"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </Button>
           </div>
         </div>
       </div>
